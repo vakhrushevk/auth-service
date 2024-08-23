@@ -24,9 +24,9 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserV1Client interface {
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
-	GetUserById(ctx context.Context, in *GetUserByIdRequest, opts ...grpc.CallOption) (*GetUserByIdResponse, error)
+	GetUserByID(ctx context.Context, in *GetUserByIDRequest, opts ...grpc.CallOption) (*GetUserByIDResponse, error)
 	UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	DeleteUserById(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	DeleteUserByID(ctx context.Context, in *DeleteUserByIDRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type userV1Client struct {
@@ -46,9 +46,9 @@ func (c *userV1Client) CreateUser(ctx context.Context, in *CreateUserRequest, op
 	return out, nil
 }
 
-func (c *userV1Client) GetUserById(ctx context.Context, in *GetUserByIdRequest, opts ...grpc.CallOption) (*GetUserByIdResponse, error) {
-	out := new(GetUserByIdResponse)
-	err := c.cc.Invoke(ctx, "/user_v1.UserV1/GetUserById", in, out, opts...)
+func (c *userV1Client) GetUserByID(ctx context.Context, in *GetUserByIDRequest, opts ...grpc.CallOption) (*GetUserByIDResponse, error) {
+	out := new(GetUserByIDResponse)
+	err := c.cc.Invoke(ctx, "/user_v1.UserV1/GetUserByID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -64,9 +64,9 @@ func (c *userV1Client) UpdateUser(ctx context.Context, in *UpdateUserRequest, op
 	return out, nil
 }
 
-func (c *userV1Client) DeleteUserById(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *userV1Client) DeleteUserByID(ctx context.Context, in *DeleteUserByIDRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/user_v1.UserV1/DeleteUserById", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/user_v1.UserV1/DeleteUserByID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -78,9 +78,9 @@ func (c *userV1Client) DeleteUserById(ctx context.Context, in *DeleteUserRequest
 // for forward compatibility
 type UserV1Server interface {
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
-	GetUserById(context.Context, *GetUserByIdRequest) (*GetUserByIdResponse, error)
+	GetUserByID(context.Context, *GetUserByIDRequest) (*GetUserByIDResponse, error)
 	UpdateUser(context.Context, *UpdateUserRequest) (*emptypb.Empty, error)
-	DeleteUserById(context.Context, *DeleteUserRequest) (*emptypb.Empty, error)
+	DeleteUserByID(context.Context, *DeleteUserByIDRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedUserV1Server()
 }
 
@@ -91,14 +91,14 @@ type UnimplementedUserV1Server struct {
 func (UnimplementedUserV1Server) CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
 }
-func (UnimplementedUserV1Server) GetUserById(context.Context, *GetUserByIdRequest) (*GetUserByIdResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUserById not implemented")
+func (UnimplementedUserV1Server) GetUserByID(context.Context, *GetUserByIDRequest) (*GetUserByIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserByID not implemented")
 }
 func (UnimplementedUserV1Server) UpdateUser(context.Context, *UpdateUserRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateUser not implemented")
 }
-func (UnimplementedUserV1Server) DeleteUserById(context.Context, *DeleteUserRequest) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteUserById not implemented")
+func (UnimplementedUserV1Server) DeleteUserByID(context.Context, *DeleteUserByIDRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteUserByID not implemented")
 }
 func (UnimplementedUserV1Server) mustEmbedUnimplementedUserV1Server() {}
 
@@ -131,20 +131,20 @@ func _UserV1_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserV1_GetUserById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUserByIdRequest)
+func _UserV1_GetUserByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserByIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserV1Server).GetUserById(ctx, in)
+		return srv.(UserV1Server).GetUserByID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/user_v1.UserV1/GetUserById",
+		FullMethod: "/user_v1.UserV1/GetUserByID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserV1Server).GetUserById(ctx, req.(*GetUserByIdRequest))
+		return srv.(UserV1Server).GetUserByID(ctx, req.(*GetUserByIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -167,20 +167,20 @@ func _UserV1_UpdateUser_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserV1_DeleteUserById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteUserRequest)
+func _UserV1_DeleteUserByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteUserByIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserV1Server).DeleteUserById(ctx, in)
+		return srv.(UserV1Server).DeleteUserByID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/user_v1.UserV1/DeleteUserById",
+		FullMethod: "/user_v1.UserV1/DeleteUserByID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserV1Server).DeleteUserById(ctx, req.(*DeleteUserRequest))
+		return srv.(UserV1Server).DeleteUserByID(ctx, req.(*DeleteUserByIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -197,16 +197,16 @@ var UserV1_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _UserV1_CreateUser_Handler,
 		},
 		{
-			MethodName: "GetUserById",
-			Handler:    _UserV1_GetUserById_Handler,
+			MethodName: "GetUserByID",
+			Handler:    _UserV1_GetUserByID_Handler,
 		},
 		{
 			MethodName: "UpdateUser",
 			Handler:    _UserV1_UpdateUser_Handler,
 		},
 		{
-			MethodName: "DeleteUserById",
-			Handler:    _UserV1_DeleteUserById_Handler,
+			MethodName: "DeleteUserByID",
+			Handler:    _UserV1_DeleteUserByID_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -47,15 +47,15 @@ func (s server) CreateUser(_ context.Context, request *user_v1.CreateUserRequest
 	return &user_v1.CreateUserResponse{Id: 1}, nil
 }
 
-// GetUserById - This method is designed to get the user by ID
-func (s server) GetUserById(_ context.Context, request *user_v1.GetUserByIdRequest) (*user_v1.GetUserByIdResponse, error) {
+// GetUserByID - This method is designed to get the user by ID
+func (s server) GetUserByID(_ context.Context, request *user_v1.GetUserByIDRequest) (*user_v1.GetUserByIDResponse, error) {
 	if request.Id == 0 {
-		return &user_v1.GetUserByIdResponse{}, errors.New("failed to request: empty id")
+		return &user_v1.GetUserByIDResponse{}, errors.New("failed to request: empty id")
 	}
 
 	fmt.Println("Method Get | request: ", request.GetId())
 
-	return &user_v1.GetUserByIdResponse{
+	return &user_v1.GetUserByIDResponse{
 		Id:        request.GetId(),
 		Name:      "Konstantin",
 		Email:     "Random@gmail.g",
@@ -73,8 +73,8 @@ func (s server) UpdateUser(_ context.Context, request *user_v1.UpdateUserRequest
 	return nil, nil
 }
 
-// DeleteUserById - This method allows delete User by id
-func (s server) DeleteUserById(_ context.Context, request *user_v1.DeleteUserRequest) (*emptypb.Empty, error) {
+// DeleteUserByID - This method allows delete User by id
+func (s server) DeleteUserByID(_ context.Context, request *user_v1.DeleteUserByIDRequest) (*emptypb.Empty, error) {
 	log.Println("Received Delete request")
 	log.Println("id: ", request.GetId())
 	return nil, nil

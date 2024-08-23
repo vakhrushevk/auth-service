@@ -10,9 +10,9 @@ option go_package = "github.com/vakhrushevk/auth-service/pkg/user_v1;user_v1";
 
 service UserV1{
   rpc CreateUser(CreateUserRequest) returns(CreateUserResponse);
-  rpc GetUserById(GetUserByIdRequest) returns (GetUserByIdResponse);
+  rpc GetUserByID(GetUserByIDRequest) returns (GetUserByIDResponse);
   rpc UpdateUser(UpdateUserRequest) returns (google.protobuf.Empty);
-  rpc DeleteUserById(DeleteUserRequest) returns (google.protobuf.Empty);}
+  rpc DeleteUserByID(DeleteUserByIDRequest) returns (google.protobuf.Empty);}
 
 enum Role {
   UNKNOWN = 0;
@@ -31,11 +31,11 @@ message CreateUserResponse{
   int64 id = 1;
 }
 
-message GetUserByIdRequest{
+message GetUserByIDRequest{
   int64 id = 1;
 }
 
-message GetUserByIdResponse {
+message GetUserByIDResponse {
   int64 id = 1;
   string name = 2;
   string email = 3;
@@ -50,6 +50,6 @@ message UpdateUserRequest {
   Role role = 3;
 }
 
-message DeleteUserRequest {
+message DeleteUserByIDRequest {
   int64 id = 1;
 }
