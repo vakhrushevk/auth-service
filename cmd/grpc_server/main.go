@@ -39,20 +39,16 @@ func main() {
 	}
 }
 
-// CreateUser - Создать пользователя
-//
-//nolint:revive
-func (s server) CreateUser(ctx context.Context, request *user_v1.CreateUserRequest) (*user_v1.CreateUserResponse, error) {
+// CreateUser - This method is intended to create a new User
+func (s server) CreateUser(_ context.Context, request *user_v1.CreateUserRequest) (*user_v1.CreateUserResponse, error) {
 	log.Println("Received Create request")
 	log.Printf("Name: %s\n Email: %s\n Password: %s\n PasswordConfirm %s\n Role %s",
 		request.Name, request.Email, request.Password, request.PasswordConfirm, request.Role.String())
 	return &user_v1.CreateUserResponse{Id: 1}, nil
 }
 
-// GetUserById - Получить пользователя по идентификатору
-//
-//nolint:revive
-func (s server) GetUserById(ctx context.Context, request *user_v1.GetUserByIdRequest) (*user_v1.GetUserByIdResponse, error) {
+// GetUserById - This method is designed to get the user by ID
+func (s server) GetUserById(_ context.Context, request *user_v1.GetUserByIdRequest) (*user_v1.GetUserByIdResponse, error) {
 	if request.Id == 0 {
 		return &user_v1.GetUserByIdResponse{}, errors.New("failed to request: empty id")
 	}
@@ -69,20 +65,16 @@ func (s server) GetUserById(ctx context.Context, request *user_v1.GetUserByIdReq
 	}, nil
 }
 
-// UpdateUser - Обновить пользователя
-//
-//nolint:revive
-func (s server) UpdateUser(ctx context.Context, request *user_v1.UpdateUserRequest) (*emptypb.Empty, error) {
+// UpdateUser - This method allows you to update user fields
+func (s server) UpdateUser(_ context.Context, request *user_v1.UpdateUserRequest) (*emptypb.Empty, error) {
 	log.Println("Received Update request")
-	log.Fatalf("id: %d\n name: %s\n email: %s\n", request.GetId(), request.GetName(), request.GetEmail())
+	log.Fatalf("id: %d\n name: %s\n email: %s\n", request.GetId(), request.GetName(), request.GetName())
 
 	return nil, nil
 }
 
-// DeleteUserById - Удалить пользователя по идентификатору
-//
-//nolint:revive
-func (s server) DeleteUserById(ctx context.Context, request *user_v1.DeleteUserRequest) (*emptypb.Empty, error) {
+// DeleteUserById - This method allows delete User by id
+func (s server) DeleteUserById(_ context.Context, request *user_v1.DeleteUserRequest) (*emptypb.Empty, error) {
 	log.Println("Received Delete request")
 	log.Println("id: ", request.GetId())
 	return nil, nil
