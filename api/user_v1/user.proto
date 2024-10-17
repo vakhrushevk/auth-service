@@ -16,7 +16,7 @@ service UserV1{
 
 enum Role {
   UNKNOWN = 0;
-  USER = 1;
+  USER = 1; `
   ADMIN = 2;
 }
 

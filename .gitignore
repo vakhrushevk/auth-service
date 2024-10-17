@@ -1,3 +1,4 @@
 .idea
 /bin/
 /cmd/grpc_server/tmp/
+.env
