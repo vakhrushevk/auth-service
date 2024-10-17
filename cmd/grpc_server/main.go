@@ -5,21 +5,20 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"log"
+	"net"
+	"time"
+
 	"github.com/jackc/pgx/v4"
 	"github.com/vakhrushevk/auth-service/internal/config"
 	"github.com/vakhrushevk/auth-service/internal/config/env"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-	"log"
-	"net"
-	"time"
 
 	"github.com/vakhrushevk/auth-service/pkg/user_v1"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
-
-const grpcPort = 50051
 
 var configPath string
 
@@ -55,7 +54,12 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to connect to database%v", err)
 	}
-	defer con.Close(ctx)
+	defer func() {
+		err = con.Close(ctx)
+		if err != nil {
+			log.Panicf("failed to close connection: %v", err)
+		}
+	}()
 
 	// POSTGRES --
 	lis, err := net.Listen("tcp", grpcConfig.Address()) // fmt.Sprintf("%d", grpcPort)
