@@ -3,13 +3,16 @@ package main
 import (
 	"context"
 	"errors"
+	"flag"
 	"fmt"
+	"github.com/jackc/pgx/v4"
+	"github.com/vakhrushevk/auth-service/internal/config"
+	"github.com/vakhrushevk/auth-service/internal/config/env"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 	"log"
 	"net"
 	"time"
-
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
 
 	"github.com/vakhrushevk/auth-service/pkg/user_v1"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -18,12 +21,44 @@ import (
 
 const grpcPort = 50051
 
+var configPath string
+
+func init() {
+	flag.StringVar(&configPath, "config-path", ".env", "path to config file")
+}
+
 type server struct {
 	user_v1.UnimplementedUserV1Server
 }
 
 func main() {
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", grpcPort))
+	ctx := context.Background()
+	// CONFIG ++
+	flag.Parse()
+	err := config.Load(configPath)
+	if err != nil {
+		log.Fatalf("failed to load config %v", err)
+	}
+	grpcConfig, err := env.NewGRPCConfig()
+	if err != nil {
+		log.Fatalf("Failet to get grpc Config: %v", err)
+	}
+	pgConfig, err := env.NewPGConfig()
+	if err != nil {
+		log.Fatalf("Failet to get pg Config: %v", err)
+	}
+	_ = pgConfig
+	// CONFIG --
+	// POSTGRES INIT ++
+	con, err := pgx.Connect(ctx, pgConfig.DSN())
+
+	if err != nil {
+		log.Fatalf("failed to connect to database%v", err)
+	}
+	defer con.Close(ctx)
+
+	// POSTGRES --
+	lis, err := net.Listen("tcp", grpcConfig.Address()) // fmt.Sprintf("%d", grpcPort)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
@@ -44,6 +79,7 @@ func (s server) CreateUser(_ context.Context, request *user_v1.CreateUserRequest
 	log.Println("Received Create request")
 	log.Printf("Name: %s\n Email: %s\n Password: %s\n PasswordConfirm %s\n Role %s",
 		request.Name, request.Email, request.Password, request.PasswordConfirm, request.Role.String())
+
 	return &user_v1.CreateUserResponse{Id: 1}, nil
 }
 
